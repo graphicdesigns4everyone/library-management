@@ -23,15 +23,56 @@ export interface RegisterData {
 const OWNERS_KEY = 'library_owners';
 const CURRENT_USER_KEY = 'current_library_owner';
 
-// No default admin - users must register their own accounts for security
+// Default Cosmic Library account
+const DEFAULT_OWNER = {
+  id: 'cosmic-library-001',
+  username: 'COSMICLIBRARY',
+  email: 'Abhiraj15.cs@gmail.com',
+  password: 'COSMIC37',
+  libraryName: 'Cosmic Library',
+  createdAt: new Date().toISOString(),
+};
 
-const getStoredOwners = () => {
+// Initialize with default account and clear all other data
+const initializeDefaultAccount = () => {
+  // Clear all existing data
+  const keysToKeep = [OWNERS_KEY, CURRENT_USER_KEY];
+  const allKeys = Object.keys(localStorage);
+
+  allKeys.forEach(key => {
+    if (!keysToKeep.includes(key)) {
+      localStorage.removeItem(key);
+    }
+  });
+
+  // Set only the default account
+  localStorage.setItem(OWNERS_KEY, JSON.stringify([DEFAULT_OWNER]));
+};
+
+// Check and initialize on module load
+const checkInitialization = () => {
   try {
     const stored = localStorage.getItem(OWNERS_KEY);
-    return stored ? JSON.parse(stored) : [];
+    if (!stored) {
+      initializeDefaultAccount();
+      return [DEFAULT_OWNER];
+    }
+    const owners = JSON.parse(stored);
+    // Check if default account exists
+    const hasDefault = owners.some((o: any) => o.username === DEFAULT_OWNER.username);
+    if (!hasDefault) {
+      initializeDefaultAccount();
+      return [DEFAULT_OWNER];
+    }
+    return owners;
   } catch {
-    return [];
+    initializeDefaultAccount();
+    return [DEFAULT_OWNER];
   }
+};
+
+const getStoredOwners = () => {
+  return checkInitialization();
 };
 
 export const login = async (credentials: LoginCredentials): Promise<LibraryOwner> => {

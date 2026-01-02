@@ -59,6 +59,21 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onSwitchToRegister }) =>
           </div>
         )}
 
+        {/* Credentials Box */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <p className="text-xs font-semibold text-blue-900 mb-2 uppercase">Default Credentials</p>
+          <div className="space-y-2">
+            <div>
+              <p className="text-xs text-blue-700">Username:</p>
+              <p className="text-sm font-mono text-blue-900">COSMICLIBRARY</p>
+            </div>
+            <div>
+              <p className="text-xs text-blue-700">Password:</p>
+              <p className="text-sm font-mono text-blue-900">COSMIC37</p>
+            </div>
+          </div>
+        </div>
+
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -116,6 +131,18 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onSwitchToRegister }) =>
           </button>
         </form>
 
+        {/* Register Link */}
+        <div className="mt-6 text-center">
+          <p className="text-gray-600">
+            Don't have an account?{' '}
+            <button
+              onClick={onSwitchToRegister}
+              className="text-indigo-600 hover:text-indigo-700 font-medium"
+            >
+              Register here
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );
